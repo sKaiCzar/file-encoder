@@ -3,6 +3,15 @@ import os
 import hashlib
 from mutagen.mp3 import MP3
 
+def media_size(filepath):
+    # size of audio file in bytes
+    a_m_size = float(os.stat(filepath).st_size())
+    mib_size = a_m_size/1048576.0
+    return mib_size
+
+def media_compression(filepath):
+    return None
+
 def extract_song_info(filepath):
   try:
     audio = MP3(filepath)
@@ -31,7 +40,9 @@ list_of_files = os.listdir(list_of_files_path)
 
 for i in list_of_files:
     filepath = list_of_files_path + "/" + str(i)
+    if media_size > 25.0 :
+        media_compression(filepath)
     title, artist = extract_song_info(filepath)
-    key = str(title) + "|" + str(artist)
+    key = sha1_hash((str(title) + "|" + str(artist)).encode())
     encrypted_file = list_of_files_path + "/encrypted/" key + ".encr"
     encrypt_audio(key, filepath, encrypted_file)
