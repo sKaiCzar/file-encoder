@@ -2,6 +2,9 @@ from cryptography.fernet import Fernet
 import os
 import hashlib
 from mutagen.mp3 import MP3
+from multiprocessing.pool import TheadPool as Pool
+
+pool_size = 10
 
 def media_size(filepath):
     # size of audio file in bytes
@@ -10,6 +13,7 @@ def media_size(filepath):
     return mib_size
 
 def media_compression(filepath):
+    new_bitrate = "64k"
     return None
 
 def extract_song_info(filepath):
@@ -38,7 +42,7 @@ def encrypt_file(key, input_file, output_file):
 list_of_files_path = '~/media/target'
 list_of_files = os.listdir(list_of_files_path)
 
-for i in list_of_files:
+worker_func(i):
     filepath = list_of_files_path + "/" + str(i)
     if media_size > 25.0 :
         media_compression(filepath)
@@ -46,3 +50,11 @@ for i in list_of_files:
     key = sha1_hash((str(title) + "|" + str(artist)).encode())
     encrypted_file = list_of_files_path + "/encrypted/" key + ".encr"
     encrypt_audio(key, filepath, encrypted_file)
+
+pool = Pool(pool_size)
+
+for file in list_of_files:
+    pool.apply_async(worker_func, file)
+
+pool.close()
+pool.join()
