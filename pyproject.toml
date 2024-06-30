@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "file-encoder"
+version = "0.1.0"
+description = ""
+authors = ["sKaiCzar <ujjwalgyan5@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+mutagen = "^1.47.0"
+cryptography = "^42.0.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
